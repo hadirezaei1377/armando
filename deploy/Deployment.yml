@@ -15,11 +15,28 @@ spec:
     spec:
       containers:
         - name: armando
-          image: armando:1.0.0
+          image: armando:1.1.0  
           imagePullPolicy: Never
+          readinessProbe:
+            httpGet:
+              path: /health-check
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 3
+          livenessProbe:
+            httpGet:
+              path: /health-check
+              port: 8080
+            initialDelaySeconds: 15
+            periodSeconds: 5
           ports:
           - containerPort: 8080
           env:
+           - name: MARADONA_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: maradona-secret
+                  key: auth_secret_key
             - name: ARMANDO_HTTP_SERVER_GRACEFUL_TIMEOUT
               valueFrom:
                 configMapKeyRef:
