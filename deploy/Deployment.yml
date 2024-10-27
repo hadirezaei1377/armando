@@ -44,11 +44,18 @@ spec:
                   key: http_server.graceful_timeout
             - name: ARMANDO_CONFIG_FILE_PATH
               value: /file-config.yml
+               name: ARMANDO_STATIC_PATH
+              value: /var/static-files
           volumeMounts:
             - name: armando-volume
               mountPath: /file-config.yml
               subPath: configuration.yml
+               name: armando-pv-storage
+              mountPath: "/var/static-files"
       volumes:
         - name: armando-volume
           configMap:
             name: armando-file-config
+        - name: armando-pv-storage
+          persistentVolumeClaim:
+            claimName: armando-pv-claim
