@@ -1,0 +1,21 @@
+FROM golang:1.22-alpine AS build
+
+WORKDIR /app
+
+COPY go.mod ./
+COPY go.sum ./
+
+RUN go mod download && go mod verify
+
+COPY *.go ./
+
+RUN go build -o /app/maradona
+
+# Runtime Stage
+FROM alpine:3.15
+
+COPY --from=build /app/armando /bin/armando
+
+EXPOSE 8080
+
+CMD [ "/bin/armando" ]

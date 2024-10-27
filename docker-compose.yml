@@ -1,0 +1,15 @@
+version: "3.9"
+
+services:
+  armando:
+    image: armando:1.0.0
+    networks:
+      - armando_network
+    container_name: armando
+    ports:
+      - 8091:8081
+    environment:
+      ARMANDO_HTTP_PORT: 8081
+
+networks:
+  armando_network:

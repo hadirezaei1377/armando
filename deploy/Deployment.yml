@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: armando-deployment
+spec:
+  selector:
+    matchLabels:
+      app: armando
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: armando
+    spec:
+      containers:
+        - name: armando
+          image: armando:1.0.0
+          imagePullPolicy: Never
+          ports:
+          - containerPort: 8080
