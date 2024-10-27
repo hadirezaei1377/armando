@@ -1,0 +1,2 @@
+http.port=8090
+authentication.expiration=2s
