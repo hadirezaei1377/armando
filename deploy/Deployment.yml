@@ -10,12 +10,13 @@ spec:
   replicas: 2
   template:
     metadata:
+      namespace: Hadi
       labels:
         app: armando
     spec:
       containers:
         - name: armando
-          image: armando:1.1.0  
+          image: armando:1.2.0
           imagePullPolicy: Never
           readinessProbe:
             httpGet:
@@ -32,25 +33,36 @@ spec:
           ports:
           - containerPort: 8080
           env:
-           - name: MARADONA_SECRET_KEY
+            - name: ARMANDO_REDIS_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: armando-env-config
+                  key: redis_host
+            - name: ARMANDO_REDIS_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: armando-env-config
+                  key: redis_port
+            - name: ARMANDO_SECRET_KEY
               valueFrom:
                 secretKeyRef:
-                  name: maradona-secret
+                  name: armando-secret
                   key: auth_secret_key
             - name: ARMANDO_HTTP_SERVER_GRACEFUL_TIMEOUT
               valueFrom:
                 configMapKeyRef:
                   name: armando-special-config
                   key: http_server.graceful_timeout
+
             - name: ARMANDO_CONFIG_FILE_PATH
               value: /file-config.yml
-               name: ARMANDO_STATIC_PATH
+            - name: ARMANDO_STATIC_PATH
               value: /var/static-files
           volumeMounts:
             - name: armando-volume
               mountPath: /file-config.yml
               subPath: configuration.yml
-               name: armando-pv-storage
+            - name: armando-pv-storage
               mountPath: "/var/static-files"
       volumes:
         - name: armando-volume

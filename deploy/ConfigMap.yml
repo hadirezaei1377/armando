@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: armando-file-config
+  namespace: Hadi
+data:
+  configuration.yml: |
+    http.port=8090
+    authentication.expiration=2s
+
+  test.txt: |
+    hello test
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: armando-special-config
+  namespace: Hadi
+data:
+  special.how: very
+  http_server.graceful_timeout: 10s
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: armando-env-config
+  namespace: Hadi
+data:
+  redis_host: redis-cluster
+  redis_port: "6379"

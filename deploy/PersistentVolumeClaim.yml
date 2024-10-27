@@ -2,6 +2,7 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: armando-pv-claim
+  namespace: Hadi
 spec:
   storageClassName: manual
   accessModes:
