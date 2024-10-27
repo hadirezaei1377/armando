@@ -10,7 +10,14 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
+func readEnv() {
+	fmt.Println("ARMANDO_HTTP_SERVER_GRACEFUL_TIMEOUT:",
+		getEnv("ARMANDO_HTTP_SERVER_GRACEFUL_TIMEOUT", "not set"))
+}
+
 func main() {
+	readEnv()
+
 	router := echo.New()
 
 	router.GET("/health-check", healthCheck)
@@ -21,7 +28,6 @@ func main() {
 	router.Static("/statics", staticFilePath)
 
 	port := getEnv("ARMANDO_HTTP_PORT", "8080")
-
 	if err := router.Start(fmt.Sprintf(":%s", port)); err != nil {
 		log.Fatal(fmt.Sprintf("could'nt start http server: %v", err))
 	}
@@ -30,13 +36,6 @@ func main() {
 func healthCheck(c echo.Context) error {
 	return c.JSON(http.StatusOK, echo.Map{
 		"message": "everything is good!",
-	})
-}
-
-func showMePassword(c echo.Context) error {
-	key := getEnv("ARMANDO_SECRET_KEY", "no password")
-	return c.JSON(http.StatusOK, echo.Map{
-		"secret-key": key,
 	})
 }
 
@@ -55,6 +54,14 @@ func serveConfigFile(c echo.Context) error {
 
 	return c.JSON(http.StatusOK, echo.Map{
 		"data": string(content),
+	})
+}
+
+func showMePassword(c echo.Context) error {
+	key := getEnv("ARMANDO_SECRET_KEY", "no password")
+
+	return c.JSON(http.StatusOK, echo.Map{
+		"secret-key": key,
 	})
 }
 

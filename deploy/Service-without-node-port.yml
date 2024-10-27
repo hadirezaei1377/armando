@@ -2,6 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: armando-service-2
+  namespace: Hadi
 spec:
   type: ClusterIP
   selector:

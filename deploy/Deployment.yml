@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: armando-deployment
+  namespace: Hadi
 spec:
   selector:
     matchLabels:
@@ -18,3 +19,19 @@ spec:
           imagePullPolicy: Never
           ports:
           - containerPort: 8080
+          env:
+            - name: ARMANDO_HTTP_SERVER_GRACEFUL_TIMEOUT
+              valueFrom:
+                configMapKeyRef:
+                  name: armando-special-config
+                  key: http_server.graceful_timeout
+            - name: ARMANDO_CONFIG_FILE_PATH
+              value: /file-config.yml
+          volumeMounts:
+            - name: armando-volume
+              mountPath: /file-config.yml
+              subPath: configuration.yml
+      volumes:
+        - name: armando-volume
+          configMap:
+            name: armando-file-config
